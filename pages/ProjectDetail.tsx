@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProjects } from '../contexts/ProjectsContext';
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, ArrowLeft } from 'lucide-react';
+import MarkdownRenderer from '../components/MarkdownRenderer';
 
 const ProjectDetail: React.FC = () => {
   const { projects } = useProjects();
@@ -48,12 +48,11 @@ const ProjectDetail: React.FC = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-2">
-          <h2 className="text-2xl font-bold text-white mb-4 border-b-2 border-surface pb-2">Project Overview</h2>
-          <p className="text-text-primary text-lg leading-relaxed">{project.description}</p>
+          <MarkdownRenderer content={project.description} />
         </div>
 
         <div className="md:col-span-1">
-          <div className="bg-surface p-6 rounded-lg shadow-lg">
+          <div className="bg-surface p-6 rounded-lg shadow-lg sticky top-24">
             <h3 className="text-xl font-bold text-white mb-4">Tech Stack</h3>
             <div className="flex flex-wrap gap-2 mb-6">
               {project.tags.map((tag) => (
@@ -65,27 +64,27 @@ const ProjectDetail: React.FC = () => {
 
             <h3 className="text-xl font-bold text-white mb-4">Links</h3>
             <div className="flex flex-col gap-3">
-              {project.projectUrl && (
-                <a 
-                  href={project.projectUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="bg-accent text-white font-bold py-2 px-4 rounded-lg text-base hover:bg-accent-hover transition-colors duration-300 shadow-lg flex items-center justify-center gap-2"
-                >
-                  <ExternalLink size={18} />
-                  <span>View Project</span>
-                </a>
-              )}
-              {project.sourceUrl && (
-                <a 
-                  href={project.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="bg-overlay text-text-primary font-bold py-2 px-4 rounded-lg text-base hover:bg-muted transition-colors duration-300 shadow-lg flex items-center justify-center gap-2"
-                >
-                  <Github size={18} />
-                  <span>Source Code</span>
-                </a>
+              {project.links && project.links.length > 0 ? (
+                project.links.map((link, index) => {
+                  const Icon = link.label.toLowerCase().includes('source') || link.label.toLowerCase().includes('github')
+                    ? Github
+                    : ExternalLink;
+                  
+                  return (
+                    <a 
+                      key={index}
+                      href={link.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="bg-accent text-white font-bold py-2 px-4 rounded-lg text-base hover:bg-accent-hover transition-colors duration-300 shadow-lg flex items-center justify-center gap-2"
+                    >
+                      <Icon size={18} />
+                      <span>{link.label}</span>
+                    </a>
+                  );
+                })
+              ) : (
+                <p className="text-text-secondary text-sm">No links available for this project.</p>
               )}
             </div>
           </div>

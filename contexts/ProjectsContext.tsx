@@ -7,6 +7,7 @@ interface ProjectsContextType {
   updateProject: (updatedProject: Project) => void;
   addProject: (newProject: Project) => void;
   resetProjects: () => void;
+  deleteProject: (projectId: string) => void;
 }
 
 const ProjectsContext = createContext<ProjectsContextType | undefined>(undefined);
@@ -45,6 +46,13 @@ export const ProjectsProvider: React.FC<{ children: ReactNode }> = ({ children }
     persistProjects(newProjects);
   };
 
+  const deleteProject = (projectId: string) => {
+    if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
+      const newProjects = projects.filter(p => p.id !== projectId);
+      persistProjects(newProjects);
+    }
+  };
+
   const resetProjects = () => {
     if(window.confirm('Are you sure you want to reset all projects to their default state? This action cannot be undone.')) {
         localStorage.removeItem(PROJECTS_STORAGE_KEY);
@@ -54,7 +62,7 @@ export const ProjectsProvider: React.FC<{ children: ReactNode }> = ({ children }
   };
 
   return (
-    <ProjectsContext.Provider value={{ projects, updateProject, addProject, resetProjects }}>
+    <ProjectsContext.Provider value={{ projects, updateProject, addProject, resetProjects, deleteProject }}>
       {children}
     </ProjectsContext.Provider>
   );

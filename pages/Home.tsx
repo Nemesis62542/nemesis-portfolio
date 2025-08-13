@@ -5,10 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useProjects } from '../contexts/ProjectsContext';
 
 const backgroundImages = [
-  'https://picsum.photos/seed/game_bg_1/1920/1080',
-  'https://picsum.photos/seed/game_bg_2/1920/1080',
-  'https://picsum.photos/seed/game_bg_3/1920/1080',
-  'https://picsum.photos/seed/project2/1920/1080',
+  'assets/Tuna.png',
+  'assets/Cat.png',
+  'assets/Blue.png',
 ];
 
 const Home: React.FC = () => {
@@ -69,8 +68,8 @@ const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            アイデアを形にし、最高のゲーム体験を創り出すことに情熱を注いでいます。
-            企画から実装、リリースまで、一貫した開発経験が強みです。
+            <p>アイデアを形にし、最高のゲーム体験を創り出すことに情熱を注いでいます。</p>
+            <p>学生時代からの長い制作経験を活かし、“もっと面白い”を追求する制作スタイルが強みです。</p>
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
