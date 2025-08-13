@@ -7,18 +7,29 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
     const renderMarkdown = () => {
         if (!content) return null;
         
+        const parseInlineMarkdown = (text: string): React.ReactNode => {
+            // Split the text by the bold markdown syntax, keeping the delimiters.
+            const parts = text.split(/(\*\*.*?\*\*)/g);
+            return parts.map((part, index) => {
+                if (part.startsWith('**') && part.endsWith('**')) {
+                    // If the part is bold syntax, render it as a <strong> element.
+                    return <strong key={index} className="font-bold text-white">{part.slice(2, -2)}</strong>;
+                }
+                // Otherwise, return the text as is.
+                return part;
+            });
+        };
+
         const lines = content.split('\n');
         const elements: JSX.Element[] = [];
-        let inList = false;
         let listItems: JSX.Element[] = [];
         let inCodeBlock = false;
         let codeContent = '';
 
-        const flushList = (key: string | number) => {
-            if (inList) {
-                elements.push(<ul key={`ul-${key}`} className="list-disc list-inside space-y-2 my-4 pl-4 text-lg leading-relaxed text-text-primary">{listItems}</ul>);
+        const flushList = () => {
+            if (listItems.length > 0) {
+                elements.push(<ul key={`ul-${elements.length}`} className="list-disc list-inside space-y-2 my-4 pl-4 text-lg leading-relaxed text-text-primary">{listItems}</ul>);
                 listItems = [];
-                inList = false;
             }
         };
 
@@ -34,7 +45,7 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
                     );
                     codeContent = '';
                 } else {
-                    flushList(i);
+                    flushList();
                 }
                 inCodeBlock = !inCodeBlock;
                 continue;
@@ -45,23 +56,23 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
                 continue;
             }
             
-            flushList(i); // Flush list if a non-list item is encountered
-
             if (line.startsWith('## ')) {
+                flushList();
                 elements.push(<h2 key={i} className="text-3xl font-bold text-white mt-8 mb-4 border-b-2 border-surface pb-2">{line.substring(3)}</h2>);
             } else if (line.startsWith('### ')) {
+                flushList();
                 elements.push(<h3 key={i} className="text-2xl font-bold text-white mt-6 mb-3">{line.substring(4)}</h3>);
             } else if (line.startsWith('- ') || line.startsWith('* ')) {
-                if (!inList) {
-                    inList = true;
-                }
-                listItems.push(<li key={i}>{line.substring(2)}</li>);
+                listItems.push(<li key={i}>{parseInlineMarkdown(line.substring(2))}</li>);
             } else if (line.trim() !== '') {
-                 elements.push(<p key={i} className="my-4 text-lg leading-relaxed text-text-primary">{line}</p>);
+                flushList();
+                elements.push(<p key={i} className="my-4 text-lg leading-relaxed text-text-primary">{parseInlineMarkdown(line)}</p>);
+            } else {
+                flushList();
             }
         }
         
-        flushList('end'); // Flush any remaining list at the end of the content
+        flushList(); // Flush any remaining list at the end of the content
 
         return elements;
     };
