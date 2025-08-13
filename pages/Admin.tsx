@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { useProjects } from '../contexts/ProjectsContext';
 import { usePosts } from '../contexts/PostsContext';
 import { useAuth } from '../contexts/AuthContext';
 import { Project, Post } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit, RotateCcw, FolderKanban, FileText, Settings, ChevronDown, LogOut } from 'lucide-react';
+import { Plus, Edit, RotateCcw, FolderKanban, FileText, Settings, ChevronDown, LogOut, Trash2, Link as LinkIcon } from 'lucide-react';
 
 const FormInput: React.FC<any> = ({ label, name, ...props }) => (
     <div>
@@ -127,18 +126,22 @@ const AdminPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'projects' | 'posts' | 'settings'>('projects');
   
   // Projects State
-  const { projects, updateProject, addProject, resetProjects } = useProjects();
+  const { projects, updateProject, addProject, resetProjects, deleteProject } = useProjects();
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isNewProject, setIsNewProject] = useState(false);
 
   // Posts State
-  const { posts, updatePost, addPost, resetPosts } = usePosts();
+  const { posts, updatePost, addPost, resetPosts, deletePost } = usePosts();
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [isNewPost, setIsNewPost] = useState(false);
 
   // --- Project Handlers ---
   const handleEditProject = (project: Project) => {
-    setEditingProject({ ...project, tags: Array.isArray(project.tags) ? project.tags : [] });
+    setEditingProject({ 
+      ...project, 
+      tags: Array.isArray(project.tags) ? project.tags : [],
+      links: Array.isArray(project.links) ? project.links : [],
+    });
     setIsNewProject(false);
   };
   
@@ -149,8 +152,7 @@ const AdminPage: React.FC = () => {
       description: '',
       imageUrl: 'https://picsum.photos/seed/new-project/600/400',
       tags: [],
-      projectUrl: '',
-      sourceUrl: '',
+      links: [],
     });
     setIsNewProject(true);
   };
@@ -177,6 +179,28 @@ const AdminPage: React.FC = () => {
       } else {
         setEditingProject({ ...editingProject, [name]: value });
       }
+    }
+  };
+
+  const handleLinkChange = (index: number, field: 'label' | 'url', value: string) => {
+    if (editingProject) {
+        const newLinks = [...editingProject.links];
+        newLinks[index] = { ...newLinks[index], [field]: value };
+        setEditingProject({ ...editingProject, links: newLinks });
+    }
+  };
+
+  const handleAddLink = () => {
+    if (editingProject) {
+        const newLinks = [...editingProject.links, { label: '', url: '' }];
+        setEditingProject({ ...editingProject, links: newLinks });
+    }
+  };
+
+  const handleRemoveLink = (index: number) => {
+    if (editingProject) {
+        const newLinks = editingProject.links.filter((_, i) => i !== index);
+        setEditingProject({ ...editingProject, links: newLinks });
     }
   };
 
@@ -271,11 +295,33 @@ const AdminPage: React.FC = () => {
                 <h2 className="text-2xl font-bold text-white mb-6">{isNewProject ? '新規プロジェクトを追加' : 'プロジェクトを編集'}</h2>
                 <form onSubmit={handleSaveProject} className="space-y-6">
                    <FormInput label="タイトル" name="title" type="text" value={editingProject.title} onChange={handleChangeProject} required />
-                   <FormTextarea label="説明" name="description" value={editingProject.description} onChange={handleChangeProject} required rows={4} />
+                   <FormTextarea label="説明 (Markdown対応)" name="description" value={editingProject.description} onChange={handleChangeProject} required rows={6} />
                    <FormInput label="画像URL" name="imageUrl" type="text" value={editingProject.imageUrl} onChange={handleChangeProject} required />
                    <FormInput label="タグ (カンマ区切り)" name="tags" type="text" value={Array.isArray(editingProject.tags) ? editingProject.tags.join(', ') : ''} onChange={handleChangeProject} />
-                   <FormInput label="プロジェクトURL (公開サイト)" name="projectUrl" type="text" value={editingProject.projectUrl || ''} onChange={handleChangeProject} />
-                   <FormInput label="ソースURL (GitHub)" name="sourceUrl" type="text" value={editingProject.sourceUrl || ''} onChange={handleChangeProject} />
+                  
+                  {/* Links Editor */}
+                  <div>
+                    <h3 className="text-lg font-medium text-subtle mb-2">関連リンク</h3>
+                    <div className="space-y-4">
+                      {editingProject.links.map((link, index) => (
+                        <div key={index} className="flex items-end gap-4 p-4 bg-overlay rounded-md">
+                          <div className="flex-grow">
+                            <FormInput label={`リンク名 ${index + 1}`} name={`linkLabel-${index}`} type="text" value={link.label} onChange={(e:any) => handleLinkChange(index, 'label', e.target.value)} placeholder="例: Source Code" />
+                          </div>
+                          <div className="flex-grow">
+                            <FormInput label={`URL ${index + 1}`} name={`linkUrl-${index}`} type="url" value={link.url} onChange={(e:any) => handleLinkChange(index, 'url', e.target.value)} placeholder="https://..." />
+                          </div>
+                          <button type="button" onClick={() => handleRemoveLink(index)} className="bg-red-600 text-white p-2 rounded-md hover:bg-red-500 transition-colors">
+                            <Trash2 size={20} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <button type="button" onClick={handleAddLink} className="mt-4 bg-accent/20 text-accent font-semibold py-2 px-4 rounded-md hover:bg-accent/40 transition-colors flex items-center gap-2">
+                      <LinkIcon size={18} /> リンクを追加
+                    </button>
+                  </div>
+
                   <div className="flex justify-end gap-4 pt-4">
                     <button type="button" onClick={() => setEditingProject(null)} className="bg-overlay text-text-primary font-bold py-2 px-4 rounded-lg hover:bg-muted transition-colors">キャンセル</button>
                     <button type="submit" className="bg-accent text-white font-bold py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors">プロジェクトを保存</button>
@@ -291,9 +337,14 @@ const AdminPage: React.FC = () => {
                       <h3 className="font-bold text-lg text-white mb-2">{project.title}</h3>
                       <p className="text-sm text-text-secondary flex-grow mb-4">{project.description.substring(0, 100)}...</p>
                     </div>
-                    <button onClick={() => handleEditProject(project)} className="mt-auto bg-overlay text-text-primary font-semibold py-2 px-4 rounded-md hover:bg-muted transition-colors duration-200 w-full flex items-center justify-center gap-2">
-                      <Edit size={16} /> 編集
-                    </button>
+                    <div className="flex gap-2 mt-auto">
+                      <button onClick={() => handleEditProject(project)} className="flex-grow bg-overlay text-text-primary font-semibold py-2 px-4 rounded-md hover:bg-muted transition-colors duration-200 flex items-center justify-center gap-2">
+                        <Edit size={16} /> 編集
+                      </button>
+                      <button onClick={() => deleteProject(project.id)} className="bg-red-900/50 text-red-300 p-2 rounded-md hover:bg-red-900/80 transition-colors duration-200">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -332,9 +383,14 @@ const AdminPage: React.FC = () => {
                                 <h3 className="font-bold text-lg text-white">{post.title}</h3>
                                 <p className="text-sm text-text-secondary">{post.date}</p>
                             </div>
-                            <button onClick={() => handleEditPost(post)} className="bg-overlay text-text-primary font-semibold py-2 px-4 rounded-md hover:bg-muted transition-colors duration-200 flex items-center justify-center gap-2">
-                                <Edit size={16} /> 編集
-                            </button>
+                            <div className="flex gap-2">
+                                <button onClick={() => handleEditPost(post)} className="bg-overlay text-text-primary font-semibold py-2 px-4 rounded-md hover:bg-muted transition-colors duration-200 flex items-center justify-center gap-2">
+                                    <Edit size={16} /> 編集
+                                </button>
+                                <button onClick={() => deletePost(post.id)} className="bg-red-900/50 text-red-300 p-2 rounded-md hover:bg-red-900/80 transition-colors duration-200">
+                                    <Trash2 size={16} />
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -361,6 +417,8 @@ if (typeof Plus === 'undefined') {
     (window as any).Settings = () => <svg/>;
     (window as any).ChevronDown = () => <svg/>;
     (window as any).LogOut = () => <svg/>;
+    (window as any).Trash2 = () => <svg/>;
+    (window as any).LinkIcon = () => <svg/>;
 }
 
 export default AdminPage;

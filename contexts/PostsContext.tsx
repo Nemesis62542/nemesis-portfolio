@@ -7,6 +7,7 @@ interface PostsContextType {
   updatePost: (updatedPost: Post) => void;
   addPost: (newPost: Post) => void;
   resetPosts: () => void;
+  deletePost: (postId: string) => void;
 }
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
@@ -44,6 +45,13 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const newPosts = [...posts, newPost];
     persistPosts(newPosts);
   };
+  
+  const deletePost = (postId: string) => {
+    if (window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+      const newPosts = posts.filter(p => p.id !== postId);
+      persistPosts(newPosts);
+    }
+  };
 
   const resetPosts = () => {
     if(window.confirm('Are you sure you want to reset all blog posts to their default state? This action cannot be undone.')) {
@@ -54,7 +62,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   return (
-    <PostsContext.Provider value={{ posts, updatePost, addPost, resetPosts }}>
+    <PostsContext.Provider value={{ posts, updatePost, addPost, resetPosts, deletePost }}>
       {children}
     </PostsContext.Provider>
   );

@@ -1,12 +1,13 @@
-
 export interface Project {
   id: string;
   title: string;
   description: string;
   imageUrl: string;
   tags: string[];
-  projectUrl?: string;
-  sourceUrl?: string;
+  links: {
+    label: string;
+    url: string;
+  }[];
 }
 
 export interface Post {
