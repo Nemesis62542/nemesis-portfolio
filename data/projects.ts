@@ -53,5 +53,22 @@ export const projects: Project[] = [
         url: "https://pcn.club/contest/contest07.html"
       }
     ]
+  },
+  {
+    id: "project-1755113077974",
+    title: "ポートフォリオサイト",
+    description: "このポートフォリオサイトも自作。Google AI Studioで大枠を作り、細かい部分や掲載内容を自分で担当し、ページの公開はGithub Pagesを利用。\n\n### こだわった部分\n- **使いやすさ**：ProjectsやBlogのページの内容は、後から追加・削除・修正などの変更が行いやすいように、管理者用機能でサイト内に専用のページを用意し、そこから内容を追加・変更できるようにしています。\n- **ビジュアル**：見やすさを意識したコンテンツの配置と、エンジニアらしさをイメージしたVSCode風の色を使用しています。",
+    imageUrl: "assets/Portfolio.png",
+    tags: [
+      "React",
+      "TailwindCSS",
+      "Github"
+    ],
+    links: [
+      {
+        label: "ポートフォリオサイト",
+        url: "https://nemesis62542.github.io/nemesis-portfolio/"
+      }
+    ]
   }
 ];
