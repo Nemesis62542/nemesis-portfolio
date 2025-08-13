@@ -84,15 +84,4 @@ const App: React.FC = () => {
   );
 };
 
-// Mocking framer-motion for compatibility in environments where it might not be pre-installed.
-// In a real project, you would `npm install framer-motion`.
-const motionMock = {
-    div: ({ children, ...props }: { children: React.ReactNode }) => <div {...props}>{children}</div>
-};
-if (typeof motion === 'undefined') {
-    (window as any).motion = motionMock;
-    (window as any).AnimatePresence = ({ children }: { children: React.ReactNode }) => <>{children}</>;
-}
-
-
 export default App;
