@@ -3,9 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <title>Nemesis Portfolio</title>
-    <script type="module" crossorigin src="/nemesis-portfolio/assets/index-DlD1TGVE.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'base': '#1E1E1E',
+              'surface': '#252526',
+              'overlay': '#333333',
+              'muted': '#808080',
+              'subtle': '#CCCCCC',
+              'text-primary': '#D4D4D4',
+              'text-secondary': '#A0A0A0',
+              'accent': '#0E639C',
+              'accent-hover': '#1177BB',
+            },
+            fontFamily: {
+              sans: ['"Noto Sans JP"', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@babel/standalone@7.24.9/babel.min.js"></script>
+
   </body>
 </html>
