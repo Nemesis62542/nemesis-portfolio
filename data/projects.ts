@@ -2,15 +2,25 @@ import { Project } from '../types';
 
 export const projects: Project[] = [
   {
-    id: 'project-1',
-    title: '3D Action Game',
-    description: 'UnityとC#で開発した、爽快なコンボが特徴の3Dアクションゲーム。企画、プログラミング、エフェクト制作まで担当。',
-    imageUrl: 'https://picsum.photos/seed/project1/600/400',
-    tags: ['Unity', 'C#', 'Blender', 'Game Design'],
-    links: [
-      { label: 'View Project', url: '#' },
-      { label: 'Source Code', url: 'https://github.com/Nemesis62542' },
+    id: "project-1",
+    title: "マグロの惑星",
+    description: "手足や翼が生えた、突然変異したマグロに襲撃された宇宙船からの脱出を目指す、サバイバルアクション脱出ゲーム。\n道中に落ちているアイテムやそれを利用したクラフト要素を駆使し、体力や空腹度に気を配りながら、マグロの脅威をかいくぐりながら先を目指す。\n日本ゲーム大賞 U18部門で銀賞を受賞。",
+    imageUrl: "assets/Tuna.png",
+    tags: [
+      "Unity",
+      "C#",
+      "MagicaVoxel"
     ],
+    links: [
+      {
+        label: "日本ゲーム大賞 U18部門 受賞作品",
+        url: "https://u18.awards.cesa.or.jp/news/pressrelease20211003/"
+      },
+      {
+        label: "作品ファイル",
+        url: "https://drive.google.com/file/d/19nUF5Rbv83x38WguA_1VRrAf6Hp5zxQG/view?usp=drive_link"
+      }
+    ]
   },
   {
     id: 'project-2',
