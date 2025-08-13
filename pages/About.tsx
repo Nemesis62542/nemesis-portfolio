@@ -44,14 +44,14 @@ const About: React.FC = () => {
                     <img src="assets\c--4.svg" alt="C# Logo" className="h-12 w-12" />
                     <span className="text-3xl font-bold tracking-wide">C#</span>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-surface text-white p-5 rounded-lg flex items-center justify-center gap-4 shadow-lg">
                         <img src="assets\blockbench_logo_white.svg" alt="BlockBench Logo" className="h-9 w-9" />
-                        <span className="text-3xl font-bold tracking-wide">BlockBench</span>
+                        <span className="text-2xl md:text-3xl font-bold tracking-wide">BlockBench</span>
                     </div>
                     <div className="bg-surface text-white p-5 rounded-lg flex items-center justify-center gap-4 shadow-lg">
                         <img src="assets\github-mark-white.svg" alt="Github Logo" className="h-9 w-9" />
-                        <span className="text-3xl font-bold tracking-wide">Github</span>
+                        <span className="text-2xl md:text-3xl font-bold tracking-wide">Github</span>
                     </div>
                 </div>
             </div>
