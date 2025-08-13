@@ -40,23 +40,18 @@ export const projects: Project[] = [
     ]
   },
   {
-    id: 'project-3',
-    title: 'VR Communication App',
-    description: 'UnityとVRMを利用したVRコミュニケーションツール。アバターを通じた新しい形の対話体験を追求した。',
-    imageUrl: 'https://picsum.photos/seed/project3/600/400',
-    tags: ['Unity', 'VR', 'C#', 'Networking'],
-    links: [
-        { label: 'Source Code', url: 'https://github.com/Nemesis62542' },
+    id: "project-3",
+    title: "Home Wars",
+    description: "小さくなった戦闘機が家の中を飛び回り、家具や小物と戦うシューティングゲーム。\nNemesisのゲームクリエイターとしての処女作であり、PCNプロコン2017夏にて**最優秀賞を受賞**。",
+    imageUrl: "assets/home wars.png",
+    tags: [
+      "Scratch"
     ],
-  },
-    {
-    id: 'project-4',
-    title: 'Portfolio Website',
-    description: 'このポートフォリオサイト自体も作品の一つです。ReactとTailwind CSSで構築し、静的サイトとして公開しています。',
-    imageUrl: 'https://picsum.photos/seed/project4/600/400',
-    tags: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     links: [
-        { label: 'Source Code', url: 'https://github.com/Nemesis62542/portfolio' },
-    ],
-  },
+      {
+        label: "PCNプロコン2017夏 受賞作品",
+        url: "https://pcn.club/contest/contest07.html"
+      }
+    ]
+  }
 ];
