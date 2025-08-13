@@ -23,14 +23,21 @@ export const projects: Project[] = [
     ]
   },
   {
-    id: 'project-2',
-    title: 'Pixel Art RPG',
-    description: '懐かしさを感じるドット絵のRPG。C++と自作エンジンで構築し、ゲームの低レイヤーな部分への理解を深めた。',
-    imageUrl: 'https://picsum.photos/seed/project2/600/400',
-    tags: ['C++', 'Custom Engine', 'Pixel Art'],
-    links: [
-        { label: 'View Project', url: '#' },
+    id: "project-2",
+    title: "The Hungry Cat",
+    description: "「食べたものが持つ能力を自分のものにする」猫が、のどかな田舎町の中を暴れまわる、アクションゲーム。町に住む人や野良犬、悪魔や龍や神も登場して激闘を繰り広げる。\n\nUnityユースクリエイターカップでブロンズアワードを受賞。",
+    imageUrl: "assets/Cat.png",
+    tags: [
+      "Unity",
+      "C#",
+      "MagicaVoxel"
     ],
+    links: [
+      {
+        label: "作品ファイル",
+        url: "https://drive.google.com/file/d/16IIqP_K_yQPi-GvVZnwKakfhCkx1FAGK/view?usp=sharing"
+      }
+    ]
   },
   {
     id: 'project-3',
