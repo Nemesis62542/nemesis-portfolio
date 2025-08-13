@@ -3,6 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <title>Nemesis Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'base': '#1E1E1E', // VS Code Dark Modern background
+              'surface': '#252526',
+              'overlay': '#333333',
+              'muted': '#808080',
+              'subtle': '#CCCCCC',
+              'text-primary': '#D4D4D4', // VS Code text
+              'text-secondary': '#A0A0A0',
+              'accent': '#0E639C', // VS Code blue accent
+              'accent-hover': '#1177BB',
+            },
+            fontFamily: {
+              sans: ['"Noto Sans JP"', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
     <script type="module" crossorigin src="/nemesis-portfolio/assets/index-DlD1TGVE.js"></script>
   </head>
   <body>
