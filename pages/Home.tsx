@@ -5,10 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useProjects } from '../contexts/ProjectsContext';
 
 const backgroundImages = [
-  'https://picsum.photos/seed/game_bg_1/1920/1080',
-  'https://picsum.photos/seed/game_bg_2/1920/1080',
-  'https://picsum.photos/seed/game_bg_3/1920/1080',
-  'https://picsum.photos/seed/project2/1920/1080',
+  'assets/Tuna.png',
+  'assets/Cat.png',
+  'assets/Blue.png',
 ];
 
 const Home: React.FC = () => {
