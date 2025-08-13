@@ -1,0 +1,6 @@
+{
+  "name": "Game Developer Portfolio",
+  "description": "A portfolio website for a game developer to showcase projects, skills, and blog posts. Built with React and Tailwind CSS, designed for static hosting on platforms like GitHub Pages.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
