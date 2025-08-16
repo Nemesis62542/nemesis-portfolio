@@ -60,7 +60,7 @@ const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            C#とUnityを軸に活動するゲームデベロッパー
+            C#とUnityを軸に活動するゲームクリエイター
           </motion.p>
           <motion.p 
             className="text-lg text-text-primary max-w-2xl mx-auto mb-10"

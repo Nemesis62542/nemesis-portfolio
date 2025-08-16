@@ -10,6 +10,10 @@ interface MediaSliderProps {
 const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState<{ [key: number]: boolean }>({});
+  const [showControls, setShowControls] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const controlsTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   if (!media || media.length === 0) {
     return (
@@ -44,18 +48,63 @@ const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
     setIsPlaying(prev => ({ ...prev, [index]: !playing }));
   };
 
+  const resetControlsTimeout = () => {
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+    setShowControls(true);
+    controlsTimeoutRef.current = setTimeout(() => {
+      if (isPlaying[currentIndex]) {
+        setShowControls(false);
+      }
+    }, 3000);
+  };
+
   const handleVideoRef = (element: HTMLVideoElement | null, index: number) => {
     if (element) {
-      element.onplay = () => setIsPlaying(prev => ({ ...prev, [index]: true }));
-      element.onpause = () => setIsPlaying(prev => ({ ...prev, [index]: false }));
-      element.onended = () => setIsPlaying(prev => ({ ...prev, [index]: false }));
+      element.onplay = () => {
+        setIsPlaying(prev => ({ ...prev, [index]: true }));
+        resetControlsTimeout();
+      };
+      element.onpause = () => {
+        setIsPlaying(prev => ({ ...prev, [index]: false }));
+        setShowControls(true);
+        if (controlsTimeoutRef.current) {
+          clearTimeout(controlsTimeoutRef.current);
+        }
+      };
+      element.onended = () => {
+        setIsPlaying(prev => ({ ...prev, [index]: false }));
+        setShowControls(true);
+      };
+      element.ontimeupdate = () => {
+        setProgress(element.currentTime);
+        setDuration(element.duration);
+      };
+      element.onloadedmetadata = () => {
+        setDuration(element.duration);
+      };
+    }
+  };
+
+  const handleMouseMove = () => {
+    if (currentMedia.type === 'video') {
+      resetControlsTimeout();
+    }
+  };
+
+  const handleSeek = (newTime: number) => {
+    const videoElement = document.querySelector('video') as HTMLVideoElement;
+    if (videoElement) {
+      videoElement.currentTime = newTime;
+      setProgress(newTime);
     }
   };
 
   return (
     <div className={`relative rounded-lg overflow-hidden ${className}`}>
       {/* メディア表示エリア */}
-      <div className="relative bg-black aspect-video">
+      <div className="relative bg-black aspect-video" onMouseMove={handleMouseMove}>
         {currentMedia.type === 'image' ? (
           <img
             src={currentMedia.url}
@@ -78,17 +127,22 @@ const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
                 console.error('動画の読み込みに失敗:', currentMedia.url);
               }}
             />
-            
-            {/* カスタム再生ボタン */}
+
             <button
               onClick={(e) => {
                 e.preventDefault();
                 const video = e.currentTarget.previousElementSibling as HTMLVideoElement;
                 toggleVideoPlay(video, currentIndex);
               }}
-              className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/50 transition-colors"
+              className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
+                showControls || !isPlaying[currentIndex] 
+                  ? 'bg-black/30 hover:bg-black/50 opacity-100' 
+                  : 'bg-transparent opacity-0 pointer-events-none'
+              }`}
             >
-              <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 hover:bg-white/30 transition-colors">
+              <div className={`bg-white/20 backdrop-blur-sm rounded-full p-4 hover:bg-white/30 transition-all duration-300 ${
+                showControls || !isPlaying[currentIndex] ? 'scale-100' : 'scale-0'
+              }`}>
                 {isPlaying[currentIndex] ? (
                   <Pause className="w-8 h-8 text-white" />
                 ) : (
@@ -96,6 +150,34 @@ const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
                 )}
               </div>
             </button>
+
+            {/* シークバー */}
+            {duration > 0 && (
+              <div className={`absolute bottom-0 left-0 right-0 p-4 transition-all duration-300 ${
+                showControls || !isPlaying[currentIndex] ? 'opacity-100' : 'opacity-0'
+              }`}>
+                <div className="relative">
+                  <div className="h-1 bg-white/30 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-accent transition-all duration-100"
+                      style={{ width: `${(progress / duration) * 100}%` }}
+                    />
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max={duration}
+                    value={progress}
+                    onChange={(e) => handleSeek(Number(e.target.value))}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                </div>
+                <div className="flex justify-between text-xs text-white mt-1">
+                  <span>{Math.floor(progress / 60)}:{Math.floor(progress % 60).toString().padStart(2, '0')}</span>
+                  <span>{Math.floor(duration / 60)}:{Math.floor(duration % 60).toString().padStart(2, '0')}</span>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -126,21 +208,47 @@ const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
         )}
       </div>
 
-      {/* ドットインジケーター（複数メディアの場合のみ） */}
       {totalItems > 1 && (
-        <div className="flex justify-center space-x-2 mt-4">
-          {media.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentIndex
-                  ? 'bg-accent'
-                  : 'bg-surface hover:bg-overlay'
-              }`}
-              aria-label={`メディア ${index + 1} に移動`}
-            />
-          ))}
+        <div className="mt-4">
+          <div className="flex gap-2 justify-center overflow-x-auto scrollbar-hide">
+            {media.map((item, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`flex-shrink-0 relative w-16 h-12 rounded border-2 transition-all duration-200 overflow-hidden ${
+                  index === currentIndex
+                    ? 'border-accent shadow-lg scale-105'
+                    : 'border-surface hover:border-overlay hover:scale-102'
+                }`}
+                aria-label={`メディア ${index + 1} に移動`}
+              >
+                {item.type === 'image' ? (
+                  <img
+                    src={item.url}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="relative w-full h-full bg-black">
+                    <video
+                      src={item.url}
+                      className="w-full h-full object-cover"
+                      preload="metadata"
+                    />
+                    {/* 動画アイコン */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                      <Play className="w-4 h-4 text-white" />
+                    </div>
+                  </div>
+                )}
+                
+                {/* 選択中インジケーター */}
+                {index === currentIndex && (
+                  <div className="absolute inset-0 bg-accent/20 border border-accent rounded"></div>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
