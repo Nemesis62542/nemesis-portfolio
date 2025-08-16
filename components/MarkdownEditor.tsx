@@ -112,8 +112,23 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         )}
       </div>
 
-      <div className="text-xs text-text-secondary">
-        <strong>サポートされているMarkdown記法:</strong> 見出し (## ###)、太字 (**text**)、箇条書き (- または *)、コードブロック (```)
+      <div className="text-xs text-text-secondary space-y-1">
+        <div><strong>サポートされているMarkdown記法:</strong></div>
+        <div>
+          <strong>見出し:</strong> {"# ## ### #### ##### ###### |"}
+          <strong>装飾:</strong> {"**太字** *斜体* ~~取り消し~~ `コード` |"}
+          <strong>リスト:</strong> {"- * (箇条書き) 1. (番号付き)"}
+        </div>
+        <div>
+          <strong>リンク:</strong> {"[テキスト](URL) |"}
+          <strong>画像:</strong> {"![説明](URL) |"}
+          <strong>引用:</strong> {"> テキスト |"}
+          <strong>水平線:</strong> {"--- または ***"}
+        </div>
+        <div>
+          <strong>テーブル:</strong> {"| 列1 | 列2 | (行の前後に|を配置) |"}
+          <strong>コードブロック:</strong> {"```言語:タイトル"}
+        </div>
       </div>
     </div>
   );
