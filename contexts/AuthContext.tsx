@@ -2,17 +2,43 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// --- Helper Functions for Crypto ---
+// --- Secure Crypto Configuration ---
 
-async function hashPassword(password: string): Promise<string> {
+const SALT = 'xK9mP2vQ8nR5wE7tZ3cF6hJ8kL1nM4pR';
+const ITERATIONS = 10000;
+
+// Secure PBKDF2 hash function
+async function secureHashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const passwordData = encoder.encode(password);
+  const saltData = encoder.encode(SALT);
+  
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw',
+    passwordData,
+    { name: 'PBKDF2' },
+    false,
+    ['deriveBits']
+  );
+  
+  const hashBuffer = await crypto.subtle.deriveBits(
+    {
+      name: 'PBKDF2',
+      salt: saltData,
+      iterations: ITERATIONS,
+      hash: 'SHA-256'
+    },
+    keyMaterial,
+    256
+  );
+  
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// --- Context Definition ---
+async function hashPassword(password: string): Promise<string> {
+  return secureHashPassword(password);
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -24,34 +50,17 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AUTH_STORAGE_KEY = 'portfolio_auth';
-const PASSWORD_HASH_KEY = 'portfolio_password_hash';
-const DEFAULT_PASSWORD = 'admin'; // Only used for the very first setup
+const PASSWORD_HASH = '8fd86a493750529e206034bd17121cbbe1aa98f6c1c10330b02f51081e66e3bb';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return sessionStorage.getItem(AUTH_STORAGE_KEY) === 'true';
   });
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Initialize default password hash if it doesn't exist
-    const initializePassword = async () => {
-      if (!localStorage.getItem(PASSWORD_HASH_KEY)) {
-        const defaultHash = await hashPassword(DEFAULT_PASSWORD);
-        localStorage.setItem(PASSWORD_HASH_KEY, defaultHash);
-      }
-    };
-    initializePassword();
-  }, []);
   
   const login = async (password: string): Promise<boolean> => {
-    const storedHash = localStorage.getItem(PASSWORD_HASH_KEY);
-    if (!storedHash) {
-        // This should not happen if initialization is correct
-        throw new Error("Password has not been set up.");
-    }
-    const inputHash = await hashPassword(password);
-    if (inputHash === storedHash) {
+    const inputHash = await secureHashPassword(password);
+    if (inputHash === PASSWORD_HASH) {
       sessionStorage.setItem(AUTH_STORAGE_KEY, 'true');
       setIsAuthenticated(true);
       return true;
@@ -66,16 +75,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const changePassword = async (currentPassword: string, newPassword: string) => {
-    const storedHash = localStorage.getItem(PASSWORD_HASH_KEY);
-    if (!storedHash) {
-        throw new Error("Cannot change password, initial setup not found.");
-    }
-    const currentHash = await hashPassword(currentPassword);
-    if (currentHash !== storedHash) {
+    const currentHash = await secureHashPassword(currentPassword);
+    if (currentHash !== PASSWORD_HASH) {
         throw new Error("Current password is not correct.");
     }
-    const newHash = await hashPassword(newPassword);
-    localStorage.setItem(PASSWORD_HASH_KEY, newHash);
+
+    const newHash = await secureHashPassword(newPassword);
+
+    const message = `
+パスワード変更のために以下のステップを実行してください:
+
+1. contexts/AuthContext.tsx ファイルを開く
+2. 58行目の PASSWORD_HASH の値を以下に変更:
+   '${newHash}'
+3. ファイルを保存してアプリケーションを再デプロイ
+
+新しいパスワードのハッシュ値: ${newHash}
+    `.trim();
+    
+    throw new Error(message);
   };
 
   return (

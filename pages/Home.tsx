@@ -5,9 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useProjects } from '../contexts/ProjectsContext';
 
 const backgroundImages = [
-  'assets/Tuna.png',
-  'assets/Cat.png',
-  'assets/Blue.png',
+  'assets/images/Tuna.png',
+  'assets/images/Cat.png',
+  'assets/images/Blue.png',
 ];
 
 const Home: React.FC = () => {
@@ -60,7 +60,7 @@ const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            C#とUnityを軸に活動するゲームデベロッパー
+            C#とUnityを軸に活動するゲームクリエイター
           </motion.p>
           <motion.p 
             className="text-lg text-text-primary max-w-2xl mx-auto mb-10"
@@ -98,7 +98,7 @@ const Home: React.FC = () => {
             <Link to={`/projects/${project.id}`} key={project.id} className="group relative block bg-surface rounded-lg overflow-hidden shadow-lg h-64 md:h-80 transform transition-transform duration-300 hover:-translate-y-2">
                 <div 
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-105"
-                    style={{ backgroundImage: `url(${project.imageUrl})` }}
+                    style={{ backgroundImage: `url(${project.thumbnailUrl || project.imageUrl})` }}
                 ></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
                 <div className="relative h-full flex flex-col justify-end p-6">

@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Project, Post } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit, RotateCcw, FolderKanban, FileText, Settings, ChevronDown, LogOut, Trash2, Link as LinkIcon } from 'lucide-react';
+import MarkdownEditor from '../components/MarkdownEditor';
 
 const FormInput: React.FC<any> = ({ label, name, ...props }) => (
     <div>
@@ -141,6 +142,9 @@ const AdminPage: React.FC = () => {
       ...project, 
       tags: Array.isArray(project.tags) ? project.tags : [],
       links: Array.isArray(project.links) ? project.links : [],
+      images: Array.isArray(project.images) ? project.images : (project.imageUrl ? [project.imageUrl] : []),
+      videos: Array.isArray(project.videos) ? project.videos : [],
+      thumbnailUrl: project.thumbnailUrl || project.imageUrl,
     });
     setIsNewProject(false);
   };
@@ -151,6 +155,9 @@ const AdminPage: React.FC = () => {
       title: '',
       description: '',
       imageUrl: 'https://picsum.photos/seed/new-project/600/400',
+      thumbnailUrl: '',
+      images: [],
+      videos: [],
       tags: [],
       links: [],
     });
@@ -176,6 +183,12 @@ const AdminPage: React.FC = () => {
       const { name, value } = e.target;
       if (name === 'tags') {
         setEditingProject({ ...editingProject, tags: value.split(',').map(tag => tag.trim()) });
+      } else if (name === 'imageUrls') {
+        const images = value.split(',').map(url => url.trim()).filter(Boolean);
+        setEditingProject({ ...editingProject, images, imageUrl: images[0] || editingProject.imageUrl });
+      } else if (name === 'videoUrls') {
+        const videos = value.split(',').map(url => url.trim()).filter(Boolean);
+        setEditingProject({ ...editingProject, videos });
       } else {
         setEditingProject({ ...editingProject, [name]: value });
       }
@@ -295,8 +308,20 @@ const AdminPage: React.FC = () => {
                 <h2 className="text-2xl font-bold text-white mb-6">{isNewProject ? '新規プロジェクトを追加' : 'プロジェクトを編集'}</h2>
                 <form onSubmit={handleSaveProject} className="space-y-6">
                    <FormInput label="タイトル" name="title" type="text" value={editingProject.title} onChange={handleChangeProject} required />
-                   <FormTextarea label="説明 (Markdown対応)" name="description" value={editingProject.description} onChange={handleChangeProject} required rows={6} />
-                   <FormInput label="画像URL" name="imageUrl" type="text" value={editingProject.imageUrl} onChange={handleChangeProject} required />
+                   <MarkdownEditor label="説明 (Markdown対応)" name="description" value={editingProject.description} onChange={handleChangeProject} required rows={6} />
+                   <FormInput label="サムネイル画像URL (一覧表示用)" name="thumbnailUrl" type="text" value={editingProject.thumbnailUrl || editingProject.imageUrl} onChange={handleChangeProject} required />
+                   <div>
+                     <FormInput label="画像URL (カンマ区切りで複数指定可)" name="imageUrls" type="text" value={Array.isArray(editingProject.images) ? editingProject.images.join(', ') : (editingProject.imageUrl || '')} onChange={handleChangeProject} placeholder="assets/images/image1.jpg, assets/images/image2.jpg" />
+                     <div className="mt-1 text-xs text-yellow-400">
+                       <strong>⚠️ 注意:</strong> ファイル名には日本語・スペース・特殊文字を使用しないでください。英数字とハイフン(-), アンダースコア(_)のみ推奨
+                     </div>
+                   </div>
+                   <div>
+                     <FormInput label="動画URL (カンマ区切りで複数指定可)" name="videoUrls" type="text" value={Array.isArray(editingProject.videos) ? editingProject.videos.join(', ') : ''} onChange={handleChangeProject} placeholder="assets/videos/video1.mp4, assets/videos/video2.mp4" />
+                     <div className="mt-1 text-xs text-yellow-400">
+                       <strong>⚠️ 注意:</strong> ファイル名には日本語・スペース・特殊文字を使用しないでください。例: maguro-planet.mp4
+                     </div>
+                   </div>
                    <FormInput label="タグ (カンマ区切り)" name="tags" type="text" value={Array.isArray(editingProject.tags) ? editingProject.tags.join(', ') : ''} onChange={handleChangeProject} />
                   
                   {/* Links Editor */}
@@ -368,7 +393,7 @@ const AdminPage: React.FC = () => {
                   <FormInput label="タイトル" name="title" type="text" value={editingPost.title} onChange={handleChangePost} required />
                   <FormInput label="日付" name="date" type="date" value={editingPost.date} onChange={handleChangePost} required />
                   <FormTextarea label="抜粋" name="excerpt" value={editingPost.excerpt} onChange={handleChangePost} required rows={3} />
-                  <FormTextarea label="内容 (Markdown)" name="content" value={editingPost.content} onChange={handleChangePost} required rows={15} />
+                  <MarkdownEditor label="内容 (Markdown)" name="content" value={editingPost.content} onChange={handleChangePost} required rows={15} />
                   <div className="flex justify-end gap-4 pt-4">
                     <button type="button" onClick={() => setEditingPost(null)} className="bg-overlay text-text-primary font-bold py-2 px-4 rounded-lg hover:bg-muted transition-colors">キャンセル</button>
                     <button type="submit" className="bg-accent text-white font-bold py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors">投稿を保存</button>

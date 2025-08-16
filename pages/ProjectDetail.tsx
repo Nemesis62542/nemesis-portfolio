@@ -1,14 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProjects } from '../contexts/ProjectsContext';
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, ArrowLeft } from 'lucide-react';
 import MarkdownRenderer from '../components/MarkdownRenderer';
+import MediaSlider from '../components/MediaSlider';
+import { MediaItem } from '../types';
 
 const ProjectDetail: React.FC = () => {
   const { projects } = useProjects();
   const { projectId } = useParams<{ projectId: string }>();
   const project = projects.find((p) => p.id === projectId);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [projectId]);
+
+  // メディア配列を生成（画像と動画を統合）
+  const getProjectMedia = (): MediaItem[] => {
+    if (!project) return [];
+    
+    const media: MediaItem[] = [];
+    
+    // 複数画像を追加
+    if (project.images && project.images.length > 0) {
+      project.images.forEach(url => {
+        media.push({ type: 'image', url });
+      });
+    } else if (project.imageUrl) {
+      // 後方互換性: 単一画像の場合
+      media.push({ type: 'image', url: project.imageUrl });
+    }
+    
+    // 動画を追加
+    if (project.videos && project.videos.length > 0) {
+      project.videos.forEach(url => {
+        media.push({ type: 'video', url });
+      });
+    }
+    
+    return media;
+  };
 
   if (!project) {
     return (
@@ -43,7 +75,7 @@ const ProjectDetail: React.FC = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1, duration: 0.5 }}
       >
-        <img src={project.imageUrl} alt={project.title} className="w-full object-cover" />
+        <MediaSlider media={getProjectMedia()} className="w-full" />
       </motion.div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
