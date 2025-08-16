@@ -310,8 +310,18 @@ const AdminPage: React.FC = () => {
                    <FormInput label="タイトル" name="title" type="text" value={editingProject.title} onChange={handleChangeProject} required />
                    <MarkdownEditor label="説明 (Markdown対応)" name="description" value={editingProject.description} onChange={handleChangeProject} required rows={6} />
                    <FormInput label="サムネイル画像URL (一覧表示用)" name="thumbnailUrl" type="text" value={editingProject.thumbnailUrl || editingProject.imageUrl} onChange={handleChangeProject} required />
-                   <FormInput label="画像URL (カンマ区切りで複数指定可)" name="imageUrls" type="text" value={Array.isArray(editingProject.images) ? editingProject.images.join(', ') : (editingProject.imageUrl || '')} onChange={handleChangeProject} placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg" />
-                   <FormInput label="動画URL (カンマ区切りで複数指定可)" name="videoUrls" type="text" value={Array.isArray(editingProject.videos) ? editingProject.videos.join(', ') : ''} onChange={handleChangeProject} placeholder="https://example.com/video1.mp4, https://example.com/video2.mp4" />
+                   <div>
+                     <FormInput label="画像URL (カンマ区切りで複数指定可)" name="imageUrls" type="text" value={Array.isArray(editingProject.images) ? editingProject.images.join(', ') : (editingProject.imageUrl || '')} onChange={handleChangeProject} placeholder="assets/images/image1.jpg, assets/images/image2.jpg" />
+                     <div className="mt-1 text-xs text-yellow-400">
+                       <strong>⚠️ 注意:</strong> ファイル名には日本語・スペース・特殊文字を使用しないでください。英数字とハイフン(-), アンダースコア(_)のみ推奨
+                     </div>
+                   </div>
+                   <div>
+                     <FormInput label="動画URL (カンマ区切りで複数指定可)" name="videoUrls" type="text" value={Array.isArray(editingProject.videos) ? editingProject.videos.join(', ') : ''} onChange={handleChangeProject} placeholder="assets/videos/video1.mp4, assets/videos/video2.mp4" />
+                     <div className="mt-1 text-xs text-yellow-400">
+                       <strong>⚠️ 注意:</strong> ファイル名には日本語・スペース・特殊文字を使用しないでください。例: maguro-planet.mp4
+                     </div>
+                   </div>
                    <FormInput label="タグ (カンマ区切り)" name="tags" type="text" value={Array.isArray(editingProject.tags) ? editingProject.tags.join(', ') : ''} onChange={handleChangeProject} />
                   
                   {/* Links Editor */}
