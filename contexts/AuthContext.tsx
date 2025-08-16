@@ -50,7 +50,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AUTH_STORAGE_KEY = 'portfolio_auth';
-const PASSWORD_HASH = 'bce87c2ef5122ebc9ebf27b85413efe91137d3aaa8c2dcedf9e7a8975db58df3';
+const PASSWORD_HASH = '8fd86a493750529e206034bd17121cbbe1aa98f6c1c10330b02f51081e66e3bb';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
