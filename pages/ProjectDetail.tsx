@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProjects } from '../contexts/ProjectsContext';
 import { motion } from 'framer-motion';
@@ -9,6 +9,10 @@ const ProjectDetail: React.FC = () => {
   const { projects } = useProjects();
   const { projectId } = useParams<{ projectId: string }>();
   const project = projects.find((p) => p.id === projectId);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [projectId]);
 
   if (!project) {
     return (

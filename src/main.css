@@ -4,3 +4,11 @@
   --color-*: initial;
   --font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+html, body {
+  background-color: #1E1E1E;
+}
+
+#root {
+  background-color: #1E1E1E;
+}

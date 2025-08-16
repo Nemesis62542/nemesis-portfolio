@@ -67,7 +67,7 @@ const About: React.FC = () => {
         <h2 className="text-3xl font-bold text-white text-center mb-8">SNS</h2>
         <div className="max-w-md mx-auto flex justify-center">
             <a 
-              href="https://x.com/Nemesis_Creater"
+              href="https://x.com/Nemesis_Creator"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-surface text-white p-5 rounded-lg flex items-center justify-center gap-4 shadow-lg w-full hover:bg-overlay transition-colors duration-300"
