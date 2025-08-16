@@ -61,6 +61,10 @@ const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
             src={currentMedia.url}
             alt={currentMedia.title || `Image ${currentIndex + 1}`}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              console.error('画像の読み込みに失敗:', currentMedia.url);
+              e.currentTarget.style.display = 'none';
+            }}
           />
         ) : (
           <div className="relative w-full h-full">
@@ -70,6 +74,9 @@ const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
               className="w-full h-full object-cover"
               controls={false}
               preload="metadata"
+              onError={(e) => {
+                console.error('動画の読み込みに失敗:', currentMedia.url);
+              }}
             />
             
             {/* カスタム再生ボタン */}
