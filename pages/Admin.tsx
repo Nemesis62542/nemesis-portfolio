@@ -142,6 +142,9 @@ const AdminPage: React.FC = () => {
       ...project, 
       tags: Array.isArray(project.tags) ? project.tags : [],
       links: Array.isArray(project.links) ? project.links : [],
+      images: Array.isArray(project.images) ? project.images : (project.imageUrl ? [project.imageUrl] : []),
+      videos: Array.isArray(project.videos) ? project.videos : [],
+      thumbnailUrl: project.thumbnailUrl || project.imageUrl,
     });
     setIsNewProject(false);
   };
@@ -152,6 +155,9 @@ const AdminPage: React.FC = () => {
       title: '',
       description: '',
       imageUrl: 'https://picsum.photos/seed/new-project/600/400',
+      thumbnailUrl: '',
+      images: [],
+      videos: [],
       tags: [],
       links: [],
     });
@@ -177,6 +183,12 @@ const AdminPage: React.FC = () => {
       const { name, value } = e.target;
       if (name === 'tags') {
         setEditingProject({ ...editingProject, tags: value.split(',').map(tag => tag.trim()) });
+      } else if (name === 'imageUrls') {
+        const images = value.split(',').map(url => url.trim()).filter(Boolean);
+        setEditingProject({ ...editingProject, images, imageUrl: images[0] || editingProject.imageUrl });
+      } else if (name === 'videoUrls') {
+        const videos = value.split(',').map(url => url.trim()).filter(Boolean);
+        setEditingProject({ ...editingProject, videos });
       } else {
         setEditingProject({ ...editingProject, [name]: value });
       }
@@ -297,7 +309,9 @@ const AdminPage: React.FC = () => {
                 <form onSubmit={handleSaveProject} className="space-y-6">
                    <FormInput label="タイトル" name="title" type="text" value={editingProject.title} onChange={handleChangeProject} required />
                    <MarkdownEditor label="説明 (Markdown対応)" name="description" value={editingProject.description} onChange={handleChangeProject} required rows={6} />
-                   <FormInput label="画像URL" name="imageUrl" type="text" value={editingProject.imageUrl} onChange={handleChangeProject} required />
+                   <FormInput label="サムネイル画像URL (一覧表示用)" name="thumbnailUrl" type="text" value={editingProject.thumbnailUrl || editingProject.imageUrl} onChange={handleChangeProject} required />
+                   <FormInput label="画像URL (カンマ区切りで複数指定可)" name="imageUrls" type="text" value={Array.isArray(editingProject.images) ? editingProject.images.join(', ') : (editingProject.imageUrl || '')} onChange={handleChangeProject} placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg" />
+                   <FormInput label="動画URL (カンマ区切りで複数指定可)" name="videoUrls" type="text" value={Array.isArray(editingProject.videos) ? editingProject.videos.join(', ') : ''} onChange={handleChangeProject} placeholder="https://example.com/video1.mp4, https://example.com/video2.mp4" />
                    <FormInput label="タグ (カンマ区切り)" name="tags" type="text" value={Array.isArray(editingProject.tags) ? editingProject.tags.join(', ') : ''} onChange={handleChangeProject} />
                   
                   {/* Links Editor */}

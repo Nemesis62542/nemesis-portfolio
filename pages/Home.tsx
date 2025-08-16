@@ -98,7 +98,7 @@ const Home: React.FC = () => {
             <Link to={`/projects/${project.id}`} key={project.id} className="group relative block bg-surface rounded-lg overflow-hidden shadow-lg h-64 md:h-80 transform transition-transform duration-300 hover:-translate-y-2">
                 <div 
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-105"
-                    style={{ backgroundImage: `url(${project.imageUrl})` }}
+                    style={{ backgroundImage: `url(${project.thumbnailUrl || project.imageUrl})` }}
                 ></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
                 <div className="relative h-full flex flex-col justify-end p-6">
