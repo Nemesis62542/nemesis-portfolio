@@ -102,9 +102,9 @@ const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
   };
 
   return (
-    <div className={`relative rounded-lg overflow-hidden ${className}`}>
+    <div className={`relative rounded-lg overflow-hidden bg-surface ${className}`}>
       {/* メディア表示エリア */}
-      <div className="relative bg-black aspect-video" onMouseMove={handleMouseMove}>
+      <div className="relative aspect-video" onMouseMove={handleMouseMove}>
         {currentMedia.type === 'image' ? (
           <img
             src={currentMedia.url}
@@ -209,8 +209,8 @@ const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
       </div>
 
       {totalItems > 1 && (
-        <div className="mt-4">
-          <div className="flex gap-2 justify-center overflow-x-auto scrollbar-hide">
+        <div >
+          <div className="flex gap-2 justify-center items-center overflow-x-auto scrollbar-hide py-2">
             {media.map((item, index) => (
               <button
                 key={index}
@@ -229,7 +229,7 @@ const MediaSlider: React.FC<MediaSliderProps> = ({ media, className = '' }) => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="relative w-full h-full bg-black">
+                  <div className="relative w-full h-full bg-surface">
                     <video
                       src={item.url}
                       className="w-full h-full object-cover"
