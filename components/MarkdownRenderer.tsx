@@ -58,6 +58,22 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
                 });
             });
             
+            // Images ![alt](url) - Process before links to avoid conflicts
+            result = result.flatMap((item, index) => {
+                if (typeof item !== 'string') return item;
+                const parts = item.split(/(!\[([^\]]*)\]\(([^)]+)\))/g);
+                const newParts = [];
+                for (let i = 0; i < parts.length; i += 4) {
+                    if (parts[i]) newParts.push(parts[i]);
+                    if (parts[i + 1] && parts[i + 3]) {
+                        newParts.push(
+                            <img key={`${index}-img-${i}`} src={parts[i + 3]} alt={parts[i + 2] || ''} className="max-w-full h-auto rounded-md my-2" />
+                        );
+                    }
+                }
+                return newParts;
+            });
+            
             // Links [text](url)
             result = result.flatMap((item, index) => {
                 if (typeof item !== 'string') return item;
@@ -70,22 +86,6 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
                             <a key={`${index}-link-${i}`} href={parts[i + 3]} target="_blank" rel="noopener noreferrer" className="text-accent hover:text-accent-hover underline">
                                 {parts[i + 2]}
                             </a>
-                        );
-                    }
-                }
-                return newParts;
-            });
-            
-            // Images ![alt](url)
-            result = result.flatMap((item, index) => {
-                if (typeof item !== 'string') return item;
-                const parts = item.split(/(!\[([^\]]*)\]\(([^)]+)\))/g);
-                const newParts = [];
-                for (let i = 0; i < parts.length; i += 4) {
-                    if (parts[i]) newParts.push(parts[i]);
-                    if (parts[i + 1] && parts[i + 3]) {
-                        newParts.push(
-                            <img key={`${index}-img-${i}`} src={parts[i + 3]} alt={parts[i + 2] || ''} className="max-w-full h-auto rounded-md my-2" />
                         );
                     }
                 }
