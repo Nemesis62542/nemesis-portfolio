@@ -29,6 +29,9 @@ const itemVariants: Variants = {
 const Blog: React.FC = () => {
   const { posts } = usePosts();
 
+  // Sort posts by date (newest first)
+  const sortedPosts = [...posts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   return (
     <motion.div
       initial="hidden"
@@ -39,7 +42,7 @@ const Blog: React.FC = () => {
     >
       <h1 className="text-4xl font-bold text-white text-center mb-12">Blog</h1>
       <div className="space-y-8">
-        {posts.map((post) => (
+        {sortedPosts.map((post) => (
           <motion.div key={post.id} variants={itemVariants}>
             <Link to={`/blog/${post.id}`} className="block p-6 bg-surface rounded-lg shadow-lg hover:bg-overlay transition-colors duration-200">
               <p className="text-sm text-text-secondary mb-1">{post.date}</p>
@@ -51,7 +54,7 @@ const Blog: React.FC = () => {
             </Link>
           </motion.div>
         ))}
-        {posts.length === 0 && <p className="text-center text-text-secondary">No blog posts found.</p>}
+        {sortedPosts.length === 0 && <p className="text-center text-text-secondary">No blog posts found.</p>}
       </div>
     </motion.div>
   );
