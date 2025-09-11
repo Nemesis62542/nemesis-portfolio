@@ -7,12 +7,15 @@ import { useProjects } from '../contexts/ProjectsContext';
 const backgroundImages = [
   'assets/images/Tuna.png',
   'assets/images/Cat.png',
-  'assets/images/Blue.png',
+  'assets/images/20250901/Blue_Visual.png',
 ];
 
 const Home: React.FC = () => {
   const { projects } = useProjects();
-  const featuredProjects = projects.slice(0, 2);
+  const featuredProjectIds = ['project-1', 'project-2'];
+  const featuredProjects = featuredProjectIds
+    .map(id => projects.find(project => project.id === id))
+    .filter(project => project !== undefined);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -62,15 +65,15 @@ const Home: React.FC = () => {
           >
             C#とUnityを軸に活動するゲームクリエイター
           </motion.p>
-          <motion.p 
+          <motion.div 
             className="text-lg text-text-primary max-w-2xl mx-auto mb-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
             <p>アイデアを形にし、最高のゲーム体験を創り出すことに情熱を注いでいます。</p>
-            <p>学生時代からの長い制作経験を活かし、“もっと面白い”を追求する制作スタイルが強みです。</p>
-          </motion.p>
+            <p>学生時代からの長い制作経験を活かし、"もっと面白い"を追求する制作スタイルが強みです。</p>
+          </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,7 +103,10 @@ const Home: React.FC = () => {
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-105"
                     style={{ backgroundImage: `url(${project.thumbnailUrl || project.imageUrl})` }}
                 ></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+                <div className="absolute inset-0" style={{ 
+                  transform: 'none',
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 20%, transparent 40%)'
+                }}></div>
                 <div className="relative h-full flex flex-col justify-end p-6">
                     <h3 className="text-2xl lg:text-3xl font-bold text-white">{project.title}</h3>
                     <p className="text-text-secondary mt-1">{project.tags.slice(0, 3).join(' / ')}</p>

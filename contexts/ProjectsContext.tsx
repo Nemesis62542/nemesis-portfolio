@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, useContext, ReactNode, useMemo } from 'react';
 import { Project } from '../types';
 import { projects as defaultProjects } from '../data/projects';
 
@@ -61,8 +61,10 @@ export const ProjectsProvider: React.FC<{ children: ReactNode }> = ({ children }
     }
   };
 
+  const reversedProjects = useMemo(() => [...projects].reverse(), [projects]);
+
   return (
-    <ProjectsContext.Provider value={{ projects, updateProject, addProject, resetProjects, deleteProject }}>
+    <ProjectsContext.Provider value={{ projects: reversedProjects, updateProject, addProject, resetProjects, deleteProject }}>
       {children}
     </ProjectsContext.Provider>
   );
