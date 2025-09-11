@@ -5,9 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useProjects } from '../contexts/ProjectsContext';
 
 const backgroundImages = [
-  '/assets/images/Tuna.png',
-  '/assets/images/Cat.png',
-  '/assets/images/20250901/Blue_Visual.png',
+  'assets/images/Tuna.png',
+  'assets/images/Cat.png',
+  'assets/images/20250901/Blue_Visual.png',
 ];
 
 const Home: React.FC = () => {
