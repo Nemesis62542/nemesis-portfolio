@@ -103,7 +103,10 @@ const Home: React.FC = () => {
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-105"
                     style={{ backgroundImage: `url(${project.thumbnailUrl || project.imageUrl})` }}
                 ></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+                <div className="absolute inset-0" style={{ 
+                  transform: 'none',
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 20%, transparent 40%)'
+                }}></div>
                 <div className="relative h-full flex flex-col justify-end p-6">
                     <h3 className="text-2xl lg:text-3xl font-bold text-white">{project.title}</h3>
                     <p className="text-text-secondary mt-1">{project.tags.slice(0, 3).join(' / ')}</p>
