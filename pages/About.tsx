@@ -37,20 +37,20 @@ const About: React.FC = () => {
         <div className="max-w-2xl mx-auto">
             <div className="flex flex-col gap-4">
                 <div className="bg-surface text-white px-5 py-5 rounded-lg flex items-center justify-center gap-4 shadow-lg">
-                    <img src="assets\images\U_Cube_1C_White.svg" alt="Unity Logo" className="h-12 w-12" />
+                    <img src="assets/images/logo/U_Cube_1C_White.svg" alt="Unity Logo" className="h-12 w-12" />
                     <span className="text-3xl font-bold tracking-wide">Unity</span>
                 </div>
                 <div className="bg-surface text-white px-5 py-5 rounded-lg flex items-center justify-center gap-4 shadow-lg">
-                    <img src="assets\images\c--4.svg" alt="C# Logo" className="h-12 w-12" />
+                    <img src="assets/images/logo/c--4.svg" alt="C# Logo" className="h-12 w-12" />
                     <span className="text-3xl font-bold tracking-wide">C#</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-surface text-white p-5 rounded-lg flex items-center justify-center gap-4 shadow-lg">
-                        <img src="assets\images\blockbench_logo_white.svg" alt="BlockBench Logo" className="h-9 w-9" />
+                        <img src="assets/images/logo/blockbench_logo_white.svg" alt="BlockBench Logo" className="h-9 w-9" />
                         <span className="text-2xl md:text-3xl font-bold tracking-wide">BlockBench</span>
                     </div>
                     <div className="bg-surface text-white p-5 rounded-lg flex items-center justify-center gap-4 shadow-lg">
-                        <img src="assets\images\github-mark-white.svg" alt="Github Logo" className="h-9 w-9" />
+                        <img src="assets/images/logo/github-mark-white.svg" alt="Github Logo" className="h-9 w-9" />
                         <span className="text-2xl md:text-3xl font-bold tracking-wide">Github</span>
                     </div>
                 </div>
@@ -65,15 +65,26 @@ const About: React.FC = () => {
         transition={{ delay: 0.2 }}
       >
         <h2 className="text-3xl font-bold text-white text-center mb-8">SNS</h2>
-        <div className="max-w-md mx-auto flex justify-center">
-            <a 
+        <div className="max-w-md mx-auto flex justify-center mb-6">
+            <a
               href="https://x.com/Nemesis_Creator"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-surface text-white p-5 rounded-lg flex items-center justify-center gap-4 shadow-lg w-full hover:bg-overlay transition-colors duration-300"
             >
-              <img src="assets/images/x_logo.svg" alt="X (formerly Twitter) Logo" className="h-9 w-9" />
+              <img src="assets/images/logo/x_logo.svg" alt="X (formerly Twitter) Logo" className="h-9 w-9" />
               <span className="text-2xl font-bold tracking-wide">Follow on X</span>
+            </a>
+        </div>
+        <div className="max-w-md mx-auto flex justify-center">
+            <a 
+              href="https://www.instagram.com/nemesis_creater/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-surface text-white p-5 rounded-lg flex items-center justify-center gap-4 shadow-lg w-full hover:bg-overlay transition-colors duration-300"
+            >
+              <img src="assets/images/logo/Instagram_Glyph_White.svg" alt="Instagram Logo" className="h-9 w-9" />
+              <span className="text-2xl font-bold tracking-wide">Follow on Instagram</span>
             </a>
         </div>
       </motion.div>
