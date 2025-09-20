@@ -65,8 +65,8 @@ const About: React.FC = () => {
         transition={{ delay: 0.2 }}
       >
         <h2 className="text-3xl font-bold text-white text-center mb-8">SNS</h2>
-        <div className="max-w-md mx-auto flex justify-center">
-            <a 
+        <div className="max-w-md mx-auto flex justify-center mb-6">
+            <a
               href="https://x.com/Nemesis_Creator"
               target="_blank"
               rel="noopener noreferrer"
@@ -74,6 +74,17 @@ const About: React.FC = () => {
             >
               <img src="assets/images/x_logo.svg" alt="X (formerly Twitter) Logo" className="h-9 w-9" />
               <span className="text-2xl font-bold tracking-wide">Follow on X</span>
+            </a>
+        </div>
+        <div className="max-w-md mx-auto flex justify-center">
+            <a 
+              href="https://www.instagram.com/nemesis_creater/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-surface text-white p-5 rounded-lg flex items-center justify-center gap-4 shadow-lg w-full hover:bg-overlay transition-colors duration-300"
+            >
+              <img src="assets/images/Instagram_Glyph_White.svg" alt="Instagram Logo" className="h-9 w-9" />
+              <span className="text-2xl font-bold tracking-wide">Follow on Instagram</span>
             </a>
         </div>
       </motion.div>
