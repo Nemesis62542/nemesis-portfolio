@@ -69,8 +69,10 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
                     if (parts[i + 1] && parts[i + 3]) {
                         const url = parts[i + 3];
                         const alt = parts[i + 2] || '';
-                        // Skip PDFs in inline processing (handled at block level)
-                        if (!url.toLowerCase().endsWith('.pdf')) {
+                        // Skip PDFs and videos in inline processing (handled at block level)
+                        const isVideo = /\.(mp4|webm|mov|avi|mkv)$/i.test(url);
+                        const isPDF = url.toLowerCase().endsWith('.pdf');
+                        if (!isPDF && !isVideo) {
                             newParts.push(
                                 <img key={`${index}-img-${i}`} src={url} alt={alt} className="max-w-full h-auto rounded-md my-2" />
                             );
@@ -139,6 +141,32 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
+
+            // Video files ![alt](url.mp4|webm|mov) - Handle as block element
+            if (line.trim().match(/^!\[([^\]]*)\]\(([^)]+\.(mp4|webm|mov|avi|mkv))\)$/i)) {
+                flushList();
+                flushTable();
+                const match = line.trim().match(/^!\[([^\]]*)\]\(([^)]+\.(mp4|webm|mov|avi|mkv))\)$/i);
+                if (match) {
+                    const alt = match[1];
+                    const url = match[2];
+                    elements.push(
+                        <div key={`video-${i}`} className="my-4 rounded-lg overflow-hidden">
+                            <video
+                                src={url}
+                                controls
+                                className="w-full rounded-lg"
+                                preload="metadata"
+                            >
+                                {alt && <p>{alt}</p>}
+                                お使いのブラウザは動画タグをサポートしていません。
+                            </video>
+                            {alt && <p className="text-center text-text-secondary text-sm mt-2">{alt}</p>}
+                        </div>
+                    );
+                }
+                continue;
+            }
 
             // PDF files ![alt](url.pdf) - Handle as block element
             if (line.trim().match(/^!\[([^\]]*)\]\(([^)]+\.pdf)\)$/i)) {
