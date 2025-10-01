@@ -1,6 +1,7 @@
 
 import React from 'react';
 import type { JSX } from 'react';
+import PDFViewer from './PDFViewer';
 
 const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
     const renderMarkdown = () => {
@@ -66,9 +67,14 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
                 for (let i = 0; i < parts.length; i += 4) {
                     if (parts[i]) newParts.push(parts[i]);
                     if (parts[i + 1] && parts[i + 3]) {
-                        newParts.push(
-                            <img key={`${index}-img-${i}`} src={parts[i + 3]} alt={parts[i + 2] || ''} className="max-w-full h-auto rounded-md my-2" />
-                        );
+                        const url = parts[i + 3];
+                        const alt = parts[i + 2] || '';
+                        // Skip PDFs in inline processing (handled at block level)
+                        if (!url.toLowerCase().endsWith('.pdf')) {
+                            newParts.push(
+                                <img key={`${index}-img-${i}`} src={url} alt={alt} className="max-w-full h-auto rounded-md my-2" />
+                            );
+                        }
                     }
                 }
                 return newParts;
@@ -133,6 +139,21 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
+
+            // PDF files ![alt](url.pdf) - Handle as block element
+            if (line.trim().match(/^!\[([^\]]*)\]\(([^)]+\.pdf)\)$/i)) {
+                flushList();
+                flushTable();
+                const match = line.trim().match(/^!\[([^\]]*)\]\(([^)]+\.pdf)\)$/i);
+                if (match) {
+                    const alt = match[1];
+                    const url = match[2];
+                    elements.push(
+                        <PDFViewer key={`pdf-${i}`} url={url} alt={alt} />
+                    );
+                }
+                continue;
+            }
 
             // Code blocks
             if (line.startsWith('```')) {
