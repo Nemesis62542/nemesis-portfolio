@@ -4,6 +4,7 @@ import ProjectCard from '../components/ProjectCard';
 import { useProjects } from '../contexts/ProjectsContext';
 import { motion, Variants } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import MetaTags from '../components/MetaTags';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -24,7 +25,12 @@ const Projects: React.FC = () => {
   const { projects } = useProjects();
   
   return (
-    <motion.div
+    <>
+      <MetaTags
+        title="Projects - Nemesis Portfolio"
+        description="Nemesisが制作したゲーム作品の一覧。Unity、C#を使用した作品を掲載しています。"
+      />
+      <motion.div
       initial="hidden"
       animate="visible"
       exit={{ opacity: 0 }}
@@ -44,6 +50,7 @@ const Projects: React.FC = () => {
         ))}
       </motion.div>
     </motion.div>
+    </>
   );
 };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { usePosts } from '../contexts/PostsContext';
 import { motion, Variants } from 'framer-motion';
+import MetaTags from '../components/MetaTags';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -33,7 +34,12 @@ const Blog: React.FC = () => {
   const sortedPosts = [...posts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
-    <motion.div
+    <>
+      <MetaTags
+        title="Blog - Nemesis Portfolio"
+        description="ゲーム制作に関する記事やNemesisの活動について掲載しています。"
+      />
+      <motion.div
       initial="hidden"
       animate="visible"
       exit={{ opacity: 0 }}
@@ -57,6 +63,7 @@ const Blog: React.FC = () => {
         {sortedPosts.length === 0 && <p className="text-center text-text-secondary">No blog posts found.</p>}
       </div>
     </motion.div>
+    </>
   );
 };
 

@@ -26,4 +26,5 @@ export interface Post {
   date: string;
   excerpt: string;
   content: string;
+  thumbnailUrl?: string; // OGP画像用サムネイル
 }

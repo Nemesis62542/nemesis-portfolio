@@ -1,9 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import MetaTags from '../components/MetaTags';
 
 const About: React.FC = () => {
   return (
-    <motion.div
+    <>
+      <MetaTags
+        title="About Me - Nemesis Portfolio"
+        description="プログラミング歴9年目のゲーム制作者。主にUnityとC#を用いたゲーム開発を得意としています。"
+      />
+      <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -90,6 +96,7 @@ const About: React.FC = () => {
       </motion.div>
 
     </motion.div>
+    </>
   );
 };
 
