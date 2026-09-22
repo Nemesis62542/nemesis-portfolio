@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useProjects } from '../contexts/ProjectsContext';
+import { projects } from '../data/content';
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, ArrowLeft } from 'lucide-react';
 import MarkdownRenderer from '../components/MarkdownRenderer';
@@ -9,7 +9,6 @@ import MetaTags from '../components/MetaTags';
 import { MediaItem } from '../types';
 
 const ProjectDetail: React.FC = () => {
-  const { projects } = useProjects();
   const { projectId } = useParams<{ projectId: string }>();
   const project = projects.find((p) => p.id === projectId);
 

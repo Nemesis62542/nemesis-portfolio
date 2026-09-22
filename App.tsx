@@ -9,12 +9,6 @@ import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
-import Admin from './pages/Admin';
-import Login from './pages/Login';
-import ProtectedRoute from './components/ProtectedRoute';
-import { ProjectsProvider } from './contexts/ProjectsContext';
-import { PostsProvider } from './contexts/PostsContext';
-import { AuthProvider } from './contexts/AuthContext';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
 
 const pageVariants: Variants = {
@@ -49,15 +43,6 @@ const AnimatedRoutes: React.FC = () => {
         <Route path="/projects/:projectId" element={<ProjectDetail />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:postId" element={<BlogPost />} />
-        <Route path="/login" element={<Login />} />
-        <Route 
-          path="/admin" 
-          element={
-            <ProtectedRoute>
-              <Admin />
-            </ProtectedRoute>
-          } 
-        />
       </Routes>
     </AnimatePresence>
   );
@@ -67,19 +52,13 @@ const AnimatedRoutes: React.FC = () => {
 const App: React.FC = () => {
   return (
     <HashRouter>
-      <AuthProvider>
-        <ProjectsProvider>
-          <PostsProvider>
-            <div className="flex flex-col min-h-screen bg-base text-text-primary">
-              <Navbar />
-              <main className="flex-grow max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-                 <AnimatedRoutes />
-              </main>
-              <Footer />
-            </div>
-          </PostsProvider>
-        </ProjectsProvider>
-      </AuthProvider>
+      <div className="flex flex-col min-h-screen bg-base text-text-primary">
+        <Navbar />
+        <main className="flex-grow max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+           <AnimatedRoutes />
+        </main>
+        <Footer />
+      </div>
     </HashRouter>
   );
 };
