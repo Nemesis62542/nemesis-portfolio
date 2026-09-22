@@ -1,7 +1,7 @@
 
 import React from 'react';
 import ProjectCard from '../components/ProjectCard';
-import { useProjects } from '../contexts/ProjectsContext';
+import { projects } from '../data/content';
 import { motion, Variants } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import MetaTags from '../components/MetaTags';
@@ -22,8 +22,6 @@ const itemVariants: Variants = {
 };
 
 const Projects: React.FC = () => {
-  const { projects } = useProjects();
-  
   return (
     <>
       <MetaTags

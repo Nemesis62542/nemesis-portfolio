@@ -8,11 +8,12 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  imageUrl: string; // 後方互換性のため残す（thumbnailUrlがない場合のフォールバック）
+  order: number; // 大きいほど一覧の上に表示
+  featured: boolean; // Home の「代表作品」に表示するか
+  imageUrl: string; // thumbnailUrlがない場合のフォールバック
   thumbnailUrl?: string; // 一覧表示用サムネイル
-  images?: string[]; // 複数画像（カンマ区切り文字列をパース）
+  images?: string[]; // 複数画像
   videos?: string[]; // 動画URL配列
-  media?: MediaItem[]; // 統合メディア配列（画像・動画混在）
   tags: string[];
   links: {
     label: string;

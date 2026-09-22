@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useProjects } from '../contexts/ProjectsContext';
+import { projects } from '../data/content';
 import MetaTags from '../components/MetaTags';
 
 const backgroundImages = [
@@ -12,11 +12,7 @@ const backgroundImages = [
 ];
 
 const Home: React.FC = () => {
-  const { projects } = useProjects();
-  const featuredProjectIds = ['project-1', 'project-2'];
-  const featuredProjects = featuredProjectIds
-    .map(id => projects.find(project => project.id === id))
-    .filter(project => project !== undefined);
+  const featuredProjects = projects.filter(project => project.featured);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {

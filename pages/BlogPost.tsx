@@ -1,13 +1,12 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { usePosts } from '../contexts/PostsContext';
+import { posts } from '../data/content';
 import { motion } from 'framer-motion';
 import MarkdownRenderer from '../components/MarkdownRenderer';
 import MetaTags from '../components/MetaTags';
 
 const BlogPost: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
-  const { posts } = usePosts();
   const post = posts.find((p) => p.id === postId);
 
   if (!post) {
