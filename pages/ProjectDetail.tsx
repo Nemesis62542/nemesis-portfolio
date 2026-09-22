@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ExternalLink, Github, ArrowLeft } from 'lucide-react';
 import MarkdownRenderer from '../components/MarkdownRenderer';
 import MediaSlider from '../components/MediaSlider';
+import MetaTags from '../components/MetaTags';
 import { MediaItem } from '../types';
 
 const ProjectDetail: React.FC = () => {
@@ -53,8 +54,29 @@ const ProjectDetail: React.FC = () => {
     );
   }
 
+  // プロジェクトの説明からプレーンテキストを抽出（最初の200文字）
+  const getPlainDescription = (markdown: string): string => {
+    return markdown
+      .replace(/#{1,6}\s/g, '') // 見出し記号を削除
+      .replace(/\*\*|__/g, '') // 太字記号を削除
+      .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // リンクをテキストのみに
+      .replace(/\n/g, ' ') // 改行をスペースに
+      .substring(0, 200)
+      .trim();
+  };
+
+  const ogImage = project.thumbnailUrl || project.imageUrl;
+  const ogDescription = getPlainDescription(project.description);
+
   return (
-    <motion.div
+    <>
+      <MetaTags
+        title={`${project.title} - Nemesis Portfolio`}
+        description={ogDescription}
+        image={ogImage}
+        type="article"
+      />
+      <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -123,6 +145,7 @@ const ProjectDetail: React.FC = () => {
         </div>
       </div>
     </motion.div>
+    </>
   );
 };
 

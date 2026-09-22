@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { usePosts } from '../contexts/PostsContext';
 import { motion } from 'framer-motion';
 import MarkdownRenderer from '../components/MarkdownRenderer';
+import MetaTags from '../components/MetaTags';
 
 const BlogPost: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -20,8 +21,19 @@ const BlogPost: React.FC = () => {
     );
   }
 
+  // OGP用の画像とdescription
+  const ogImage = post.thumbnailUrl; // thumbnailUrlがない場合はundefinedでデフォルト画像が使用される
+  const ogDescription = post.excerpt;
+
   return (
-    <motion.div
+    <>
+      <MetaTags
+        title={`${post.title} - Nemesis Portfolio`}
+        description={ogDescription}
+        image={ogImage}
+        type="article"
+      />
+      <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -41,6 +53,7 @@ const BlogPost: React.FC = () => {
       
       </article>
     </motion.div>
+    </>
   );
 };
 

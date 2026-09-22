@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProjects } from '../contexts/ProjectsContext';
+import MetaTags from '../components/MetaTags';
 
 const backgroundImages = [
   'assets/images/Tuna.png',
@@ -28,6 +29,7 @@ const Home: React.FC = () => {
 
   return (
     <>
+      <MetaTags />
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

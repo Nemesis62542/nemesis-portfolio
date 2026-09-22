@@ -230,7 +230,8 @@ const AdminPage: React.FC = () => {
       title: '',
       date: today,
       excerpt: '',
-      content: ''
+      content: '',
+      thumbnailUrl: ''
     });
     setIsNewPost(true);
   };
@@ -393,6 +394,12 @@ const AdminPage: React.FC = () => {
                   <FormInput label="タイトル" name="title" type="text" value={editingPost.title} onChange={handleChangePost} required />
                   <FormInput label="日付" name="date" type="date" value={editingPost.date} onChange={handleChangePost} required />
                   <FormTextarea label="抜粋" name="excerpt" value={editingPost.excerpt} onChange={handleChangePost} required rows={3} />
+                  <div>
+                    <FormInput label="サムネイル画像URL (OGP画像用・任意)" name="thumbnailUrl" type="text" value={editingPost.thumbnailUrl || ''} onChange={handleChangePost} placeholder="assets/images/thumbnail.png" />
+                    <div className="mt-1 text-xs text-text-secondary">
+                      未設定の場合、デフォルト画像が使用されます
+                    </div>
+                  </div>
                   <MarkdownEditor label="内容 (Markdown)" name="content" value={editingPost.content} onChange={handleChangePost} required rows={15} />
                   <div className="flex justify-end gap-4 pt-4">
                     <button type="button" onClick={() => setEditingPost(null)} className="bg-overlay text-text-primary font-bold py-2 px-4 rounded-lg hover:bg-muted transition-colors">キャンセル</button>
