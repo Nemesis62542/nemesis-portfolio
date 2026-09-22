@@ -20,5 +20,5 @@ Projects / Blog の記事は `content/projects/*.md` と `content/blog/*.md` に
 
 ## Deploy
 
-main に push すると GitHub Actions が自動でビルドして GitHub Pages に公開します。
+develop に push（PR をマージ）すると GitHub Actions が自動でビルドして GitHub Pages に公開します。
 手動で公開する場合は `npm run build` の後に `npm run deploy` を実行します。

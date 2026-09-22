@@ -1,9 +1,9 @@
-# main に push されたら自動でビルドして gh-pages ブランチへ公開する
+# develop に push されたら自動でビルドして gh-pages ブランチへ公開する
 name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
   workflow_dispatch:
 
 permissions:
